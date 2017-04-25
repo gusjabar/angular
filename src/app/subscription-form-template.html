@@ -1,15 +1,78 @@
-<form class="form">
+<form 
+    class="form" 
+    #frmSubscription="ngForm" 
+    (ngSubmit)="onSubmit(frmSubscription)">
     <div class="form-group">
         <label for="userName" class="form-label">Name:</label>
-        <input type="text" id="userName" class="form-control">
+        <input 
+            type="text" 
+            ngModel name="userName" 
+            #userName="ngModel" 
+            id="userName" 
+            class="form-control"
+            required
+            minlength="3"
+            (change)="log(userName)">
+        <div *ngIf="userName.errors && userName.touched">
+            <div 
+                class="alert alert-danger" 
+                *ngIf="userName.errors.required">
+                Name is required!
+            </div>
+            <div 
+                class="alert alert-danger" 
+                *ngIf="userName.errors.minlength">
+                User name should be minimum 3 characters.
+            </div>
+        </div>
     </div>
     <div class="form-group">
         <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" id="email">
+        <input 
+            type="text" 
+            ngModel name="email" 
+            #email="ngModel" 
+            class="form-control" 
+            id="email"
+            required>
+        <div 
+            class="alert alert-danger" 
+            *ngIf="email.touched && email.errors?.required">
+            Email is required!
+        </div>
     </div>
     <div class="form-group">
-        <label for="frequency" class="form-label">Frequency of emails </label>
-        <select value="" class="form-control" id="frequency"></select>
+        <label for="frequency" 
+            class="form-label">
+            Frequency of emails 
+        </label>
+        <select 
+            value="" 
+            class="form-control" 
+            id="frequency" 
+            ngModel
+            name="frequency" 
+            #frequency="ngModel"
+            (change)="onSelected_Change(frequency)"
+            [(ngModel)]="statusValueToSet"
+            required>
+            <option [value]="''">Choose here</option>
+            <option
+                *ngFor="let frequency of frequencies" 
+                [value]="frequency.value">
+                {{frequency.text}}
+            </option>
+        </select>
+        <div 
+            class="alert alert-danger" 
+            *ngIf="frequency.touched && frequency.errors?.required">
+            Frequency is required!
+        </div>
     </div>
-   <button class="btn btn-primary" type="submit">Subscribe</button>
+    <button 
+    class="btn btn-primary" 
+    type="submit"
+    [disabled]="!frmSubscription.valid">
+        Subscribe
+    </button>
 </form>
